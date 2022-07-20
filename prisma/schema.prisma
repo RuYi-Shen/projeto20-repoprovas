@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  password String
+  Session  Session[]
+
+  @@map("users")
+}
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+  token     String
+  createdAt DateTime @default(now())
+
+  @@map("sessions")
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  Test Test[]
+
+  @@map("categories")
+}
+
+model Teacher {
+  id                Int                 @id @default(autoincrement())
+  name              String              @unique
+  TeacherDiscipline TeacherDiscipline[]
+
+  @@map("teachers")
+}
+
+model Term {
+  id         Int          @id @default(autoincrement())
+  number     Int          @unique
+  Discipline Discipline[]
+
+  @@map("terms")
+}
+
+model Discipline {
+  id                Int                 @id @default(autoincrement())
+  name              String              @unique
+  termId            Int                 @map("term_id")
+  term              Term                @relation(fields: [termId], references: [id])
+  TeacherDiscipline TeacherDiscipline[]
+
+  @@map("disciplines")
+}
+
+model TeacherDiscipline {
+  id           Int        @id @default(autoincrement())
+  teacherId    Int        @map("teacher_id")
+  teacher      Teacher    @relation(fields: [teacherId], references: [id])
+  disciplineId Int        @map("discipline_id")
+  discipline   Discipline @relation(fields: [disciplineId], references: [id])
+  Test         Test[]
+
+  @@map("teachers_disciplines")
+}
+
+model Test {
+  id                  Int               @id @default(autoincrement())
+  name                String
+  pdfUrl              String
+  categoryId          Int               @map("category_id")
+  category            Category          @relation(fields: [categoryId], references: [id])
+  teacherDisciplineId Int               @map("teacher_discipline_id")
+  teacherDiscipline   TeacherDiscipline @relation(fields: [teacherDisciplineId], references: [id])
+
+  @@map("tests")
+}
