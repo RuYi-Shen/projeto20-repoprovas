@@ -21,7 +21,7 @@ model User {
 
 model Session {
   id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
+  userId    Int      
   user      User     @relation(fields: [userId], references: [id])
   token     String
   createdAt DateTime @default(now())
@@ -56,7 +56,7 @@ model Term {
 model Discipline {
   id                Int                 @id @default(autoincrement())
   name              String              @unique
-  termId            Int                 @map("term_id")
+  termId            Int                 
   term              Term                @relation(fields: [termId], references: [id])
   TeacherDiscipline TeacherDiscipline[]
 
@@ -65,22 +65,23 @@ model Discipline {
 
 model TeacherDiscipline {
   id           Int        @id @default(autoincrement())
-  teacherId    Int        @map("teacher_id")
+  teacherId    Int        
   teacher      Teacher    @relation(fields: [teacherId], references: [id])
-  disciplineId Int        @map("discipline_id")
+  disciplineId Int        
   discipline   Discipline @relation(fields: [disciplineId], references: [id])
   Test         Test[]
 
-  @@map("teachers_disciplines")
+  @@unique([teacherId, disciplineId])
+  @@map("teachersDisciplines")
 }
 
 model Test {
   id                  Int               @id @default(autoincrement())
   name                String
   pdfUrl              String
-  categoryId          Int               @map("category_id")
+  categoryId          Int               
   category            Category          @relation(fields: [categoryId], references: [id])
-  teacherDisciplineId Int               @map("teacher_discipline_id")
+  teacherDisciplineId Int               
   teacherDiscipline   TeacherDiscipline @relation(fields: [teacherDisciplineId], references: [id])
 
   @@map("tests")

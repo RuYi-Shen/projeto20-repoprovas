@@ -10,7 +10,7 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "sessions" (
     "id" SERIAL NOT NULL,
-    "user_id" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
     "token" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -45,18 +45,18 @@ CREATE TABLE "terms" (
 CREATE TABLE "disciplines" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "term_id" INTEGER NOT NULL,
+    "termId" INTEGER NOT NULL,
 
     CONSTRAINT "disciplines_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "teachers_disciplines" (
+CREATE TABLE "teachersDisciplines" (
     "id" SERIAL NOT NULL,
-    "teacher_id" INTEGER NOT NULL,
-    "discipline_id" INTEGER NOT NULL,
+    "teacherId" INTEGER NOT NULL,
+    "disciplineId" INTEGER NOT NULL,
 
-    CONSTRAINT "teachers_disciplines_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "teachersDisciplines_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -64,8 +64,8 @@ CREATE TABLE "tests" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "pdfUrl" TEXT NOT NULL,
-    "category_id" INTEGER NOT NULL,
-    "teacher_discipline_id" INTEGER NOT NULL,
+    "categoryId" INTEGER NOT NULL,
+    "teacherDisciplineId" INTEGER NOT NULL,
 
     CONSTRAINT "tests_pkey" PRIMARY KEY ("id")
 );
@@ -85,20 +85,23 @@ CREATE UNIQUE INDEX "terms_number_key" ON "terms"("number");
 -- CreateIndex
 CREATE UNIQUE INDEX "disciplines_name_key" ON "disciplines"("name");
 
--- AddForeignKey
-ALTER TABLE "sessions" ADD CONSTRAINT "sessions_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- CreateIndex
+CREATE UNIQUE INDEX "teachersDisciplines_teacherId_disciplineId_key" ON "teachersDisciplines"("teacherId", "disciplineId");
 
 -- AddForeignKey
-ALTER TABLE "disciplines" ADD CONSTRAINT "disciplines_term_id_fkey" FOREIGN KEY ("term_id") REFERENCES "terms"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "sessions" ADD CONSTRAINT "sessions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "teachers_disciplines" ADD CONSTRAINT "teachers_disciplines_teacher_id_fkey" FOREIGN KEY ("teacher_id") REFERENCES "teachers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "disciplines" ADD CONSTRAINT "disciplines_termId_fkey" FOREIGN KEY ("termId") REFERENCES "terms"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "teachers_disciplines" ADD CONSTRAINT "teachers_disciplines_discipline_id_fkey" FOREIGN KEY ("discipline_id") REFERENCES "disciplines"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "teachersDisciplines" ADD CONSTRAINT "teachersDisciplines_teacherId_fkey" FOREIGN KEY ("teacherId") REFERENCES "teachers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "tests" ADD CONSTRAINT "tests_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "categories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "teachersDisciplines" ADD CONSTRAINT "teachersDisciplines_disciplineId_fkey" FOREIGN KEY ("disciplineId") REFERENCES "disciplines"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "tests" ADD CONSTRAINT "tests_teacher_discipline_id_fkey" FOREIGN KEY ("teacher_discipline_id") REFERENCES "teachers_disciplines"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tests" ADD CONSTRAINT "tests_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "tests" ADD CONSTRAINT "tests_teacherDisciplineId_fkey" FOREIGN KEY ("teacherDisciplineId") REFERENCES "teachersDisciplines"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
