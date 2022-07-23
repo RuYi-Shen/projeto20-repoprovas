@@ -7,11 +7,18 @@ export async function create(testInfo: Test) {
   });
 }
 
-
 export async function findById(id: number) {
   return await client.test.findUnique({
     where: {
       id,
+    },
+  });
+}
+
+export async function findByTeacherDisciplineId(teacherDisciplineId: number) {
+  return await client.test.findMany({
+    where: {
+      teacherDisciplineId,
     },
   });
 }

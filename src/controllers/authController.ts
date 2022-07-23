@@ -13,7 +13,7 @@ export async function createSession(req: Request, res: Response) {
   const userId = res.locals.user.id;
 
   const session = await authService.createSession(+userId);
-  res.send(session.token);
+  res.send(session);
 }
 
 export async function endSession(req: Request, res: Response) {

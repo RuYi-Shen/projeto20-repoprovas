@@ -10,16 +10,16 @@ export async function createTest(req: Request, res: Response) {
   res.sendStatus(201);
 }
 
-export async function findCardsByDiscipline(req: Request, res: Response) {
-  const { id } = req.params;
-  const card = await testService.findCardsByDiscipline(+id);
-  res.json(card);
-}
-
-export async function findTestsByTeacher(req: Request, res: Response) {
-  const userId = res.locals.user.id;
-  const cards = await testService.findTestsByTeacher(userId);
-  res.json(cards);
+export async function findTests(req: Request, res: Response) {
+  const { groupBy } = req.query;
+  if (groupBy === "teachers") {
+    let tests = await testService.findTestsByTeacher();
+    res.json(tests);
+  }
+  else { 
+    let tests = await testService.findTestsByDiscipline();
+    res.json(tests);
+  }
 }
 
 export async function deleteTest(req: Request, res: Response) {

@@ -30,6 +30,26 @@ export async function findByDataId({
   });
 }
 
+export async function findByDiscipline(disciplineId: number) {
+  return await client.teacherDiscipline.findMany({
+    where: {
+      disciplineId,
+    },
+  });
+}
+
+export async function findByTeacher(teacherId: number) {
+  return await client.teacherDiscipline.findMany({
+    where: {
+      teacherId,
+    },
+  });
+}
+
+export async function findAll() {
+  return await client.teacherDiscipline.findMany();
+}
+
 export async function deleteById(id: number) {
   return await client.teacherDiscipline.delete({
     where: {

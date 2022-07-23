@@ -15,6 +15,10 @@ export async function findById(id: number) {
   });
 }
 
+export async function findAll() {
+  return await client.teacher.findMany();
+}
+
 export async function deleteById(id: number) {
   return await client.teacher.delete({
     where: {

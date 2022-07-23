@@ -15,6 +15,14 @@ export async function findById(id: number) {
   });
 }
 
+export async function findByTerm(termId: number) {
+  return await client.discipline.findMany({
+    where: {
+      termId,
+    },
+  });
+}
+
 export async function deleteById(id: number) {
   return await client.discipline.delete({
     where: {

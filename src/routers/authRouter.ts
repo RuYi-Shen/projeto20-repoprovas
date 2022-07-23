@@ -5,8 +5,8 @@ import { validateEmail , validatePassword } from "../middlewares/authMiddleware.
 import { createUser , createSession, endSession } from "../controllers/authController.js";
 
 const authRouter = Router();
-authRouter.post("/signup", validateSchema(createUserInfo), validateEmail, createUser);
-authRouter.post("/signin", validateSchema(createSessionInfo), validatePassword, createSession);
-authRouter.post("/signout", validateToken, endSession);
+authRouter.post("/sign-up", validateSchema(createUserInfo), validateEmail, createUser);
+authRouter.post("/sign-in", validateSchema(createSessionInfo), validatePassword, createSession);
+authRouter.post("/sign-out", validateToken, endSession);
 
 export default authRouter;
