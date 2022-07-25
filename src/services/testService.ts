@@ -63,9 +63,7 @@ export async function findTestsByTeacher() {
       );
       const tests = await Promise.all(
         testsT.map(async (test) => {
-          const category = await categoryRepository.findById(
-            test.categoryId
-          );
+          const category = await categoryRepository.findById(test.categoryId);
           return { ...test, category };
         })
       );

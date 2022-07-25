@@ -1,26 +1,23 @@
 import app from "../src/app.js";
 import supertest from "supertest";
-//import prisma from "../src/database.js";
+import prisma from "../src/database.js";
 import { faker } from "@faker-js/faker";
-import { clearAll, insertSampleData } from "../tests/factories/databaseFactory.js"
+import {
+  clearAll,
+  insertSampleData,
+} from "../tests/factories/databaseFactory.js";
 import { createUser } from "./factories/userFactory.js";
 import { insertSampleTests } from "./factories/testFactory.js";
-
-import pkg from "@prisma/client";
-
-const { PrismaClient } = pkg;
-const prisma = new PrismaClient();
-
 
 let token = "";
 beforeAll(async () => {
   await clearAll();
-  token = await createUser();
   return await insertSampleData();
-}, 15000);
+}, 20000);
 
 beforeEach(async () => {
   await prisma.test.deleteMany({});
+  token = await createUser();
 });
 
 describe("tests", () => {
@@ -33,7 +30,7 @@ describe("tests", () => {
       teacherId: randomNumber,
       disciplineId: randomNumber * (Math.floor(Math.random() * 3) + 1),
     };
-    console.log({newTest});
+    token = await createUser();
     const response = await supertest(app)
       .post("/tests")
       .set("Authorization", `Bearer ${token}`)

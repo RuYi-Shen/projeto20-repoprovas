@@ -9,6 +9,5 @@ export async function createUser() {
   };
   await supertest(app).post("/sign-up").send(newUser);
   const { body } = await supertest(app).post("/sign-in").send(newUser);
-  console.log(body);
   return body.token;
 }

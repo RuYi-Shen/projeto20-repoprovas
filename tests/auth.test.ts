@@ -37,9 +37,7 @@ describe("authentication", () => {
       password: faker.internet.password(),
     };
 
-    const response2 = await supertest(app)
-      .post("/sign-in")
-      .send(invalidUser);
+    const response2 = await supertest(app).post("/sign-in").send(invalidUser);
     expect(response2.status).toBe(401);
   });
   it("should return 200 with token when login with valid credentials", async () => {
