@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import * as testService from "../services/testService.js";
+import prisma from "../database.js";
 
 export async function createTest(req: Request, res: Response) {
+  const users = await prisma.user.findMany({});
+  console.log({users});
   const testInfo = req.body;
   testInfo.teacherDisciplineId = res.locals.teacherDiscipline.id;
   delete testInfo.teacherId;
@@ -15,8 +18,7 @@ export async function findTests(req: Request, res: Response) {
   if (groupBy === "teachers") {
     let tests = await testService.findTestsByTeacher();
     res.json(tests);
-  }
-  else { 
+  } else {
     let tests = await testService.findTestsByDiscipline();
     res.json(tests);
   }
